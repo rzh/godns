@@ -4,7 +4,7 @@ import (
 	"crypto/md5"
 	"encoding/json"
 	"fmt"
-	"github.com/hoisie/redis"
+  // "github.com/hoisie/redis"
 	"github.com/miekg/dns"
 	"time"
 )
@@ -110,6 +110,8 @@ func (c *MemoryCache) Full() bool {
 TODO: Redis cache Backend
 */
 
+/* 
+
 type RedisCache struct {
 	Backend    *redis.Client
 	Serializer JsonSerializer
@@ -128,6 +130,7 @@ func (c *RedisCache) Set() {
 func (c *RedisCache) Remove() {
 
 }
+*/
 
 func KeyGen(q Question) string {
 	h := md5.New()
@@ -139,6 +142,7 @@ func KeyGen(q Question) string {
 
 type JsonSerializer struct {
 }
+
 
 func (*JsonSerializer) Dumps(mesg *dns.Msg) (encoded []byte, err error) {
 	encoded, err = json.Marshal(mesg)

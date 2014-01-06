@@ -2,7 +2,7 @@ package main
 
 import (
 	"bufio"
-	"github.com/hoisie/redis"
+	// "github.com/hoisie/redis"
 	"os"
 	"regexp"
 	"strings"
@@ -10,15 +10,16 @@ import (
 
 type Hosts struct {
 	FileHosts  map[string]string
-	RedisHosts *RedisHosts
+	// RedisHosts *RedisHosts
 }
 
 func NewHosts(hs HostsSettings, rs RedisSettings) Hosts {
 	fileHosts := &FileHosts{hs.HostsFile}
-	redis := &redis.Client{Addr: rs.Addr(), Db: rs.DB, Password: rs.Password}
-	redisHosts := &RedisHosts{redis, hs.RedisKey}
+	// redis := &redis.Client{Addr: rs.Addr(), Db: rs.DB, Password: rs.Password}
+	// redisHosts := &RedisHosts{redis, hs.RedisKey}
 
-	hosts := Hosts{fileHosts.GetAll(), redisHosts}
+	// hosts := Hosts{fileHosts.GetAll(), redisHosts}
+	hosts := Hosts{fileHosts.GetAll()}
 	return hosts
 
 }
@@ -33,24 +34,29 @@ func (h *Hosts) Get(domain string) (ip string, ok bool) {
 	if ip, ok = h.FileHosts[domain]; ok {
 		return
 	}
+	/*
 	if ip, ok = h.RedisHosts.Get(domain); ok {
 		return
 	}
+	*/
 	return "", false
 }
 
 func (h *Hosts) GetAll() map[string]string {
 
 	m := make(map[string]string)
+	/*
 	for domain, ip := range h.RedisHosts.GetAll() {
 		m[domain] = ip
 	}
+	*/
 	for domain, ip := range h.FileHosts {
 		m[domain] = ip
 	}
 	return m
 }
 
+/*
 type RedisHosts struct {
 	redis *redis.Client
 	key   string
@@ -70,6 +76,7 @@ func (r *RedisHosts) Get(domain string) (ip string, ok bool) {
 func (r *RedisHosts) Set(domain, ip string) (bool, error) {
 	return r.redis.Hset(r.key, domain, []byte(ip))
 }
+*/
 
 type FileHosts struct {
 	file string
